@@ -1,0 +1,85 @@
+1. npm install -g express-generator
+2. express --view=ejs nama_app
+3. cd nama_app
+4. npm install
+5. npm start
+6. tambah folder controller, model, middleware di folder nama_app
+7. install mongoosejs npm install mongoose
+8. buat masing2 model di folder model
+9. kalau mau pakai sbadmin2 install npm i startbootstrap-sb-admin-2
+10.  tambahkan ini di app.js agar css dan jsnya jalan app.use('/sb-admin-2', express.static(path.join(__dirname, 'node_modules/startbootstrap-sb-admin-2')));
+11. agar server ngerestart sendiri ketika ada perubahan tambahkan ini "dev": "nodemon ./bin/www" di package.json
+
+
+
+
+langkah memakai controller-routes-view
+1. buat controller utk menjalankan view
+module.exports = {
+	viewDashboard: (req, res) => {
+		res.render('admin/dashboard/view_dashboard');
+	}
+};
+
+2. buat routes/admin
+const router = require('express').Router();
+const adminController = require('../controllers/adminController');
+
+router.get('/dashboard', adminController.viewDashboard);
+
+module.exports = router;
+
+3.tambahkan routes di app.js
+const adminRouter = require('./routes/admin');
+app.use('/admin', adminRouter);
+
+
+agar bisa update kita install npm install method-override,
+kemudia di app js tambahkan const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
+
+UNTUK MEMBUAT ALERT DAN SESSION INSTAL  npm install connect-flash express-session
+dan tambahkan di app.js 
+var session = require('express-session')
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { maxAge: 60000 }
+}))
+
+
+var flash = require('connect-flash');
+ app.use(flash());
+
+untuk bisa upload file INSTALL npm install multer fs-extra
+di adminController tambahkan 
+const fs = require('fs-extra'); (fs.unlink)
+const path = require('path'); (utk upload)
+
+di admin tambahkan:
+const { upload } = require('../middleware/multer');
+
+dan bikin file baru dengan nama multer.js di middleware:
+
+
+HATI-HATI DENGAN AWAIT JANGAN SAMPAI LUPA KALAU LUPA MAKA TIDAK AKAN DIEKSEKUSI PERINTAH YANG SELANJUTNYA
+
+
+UNTUK HASH PASSWORD INSTAL npm i bcrypt
+tambah kan di model Usersnya 
+const bcrypt = require('bcrypt');
+usersSchema.pre('save', async function(next) {
+	const user = this;
+	if (user.isModified('password')) {
+		user.password = await bcrypt.hash(user.password, 8);
+	}
+});
+
+
+
+
+untuk membuat api: 
+1. buat apiController
+2.bikin routes/api.js
+3. daftarkan api.js di app.js
