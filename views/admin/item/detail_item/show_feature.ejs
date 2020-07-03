@@ -45,7 +45,7 @@
                                         <td><%= i + 1 %></td>
                                         <td><%= feature[i].name %></td>
                                         <td><%= feature[i].qty %></td>
-                                        <td><img src="http://localhost:3000/<%= feature[i].imageUrl %>" alt="imageUrl" height="70px" width="70px"></td>
+                                        <td><img src="https://admin-denis-staycation.herokuapp.com/<%= feature[i].imageUrl %>" alt="imageUrl" height="70px" width="70px"></td>
                                         <td>
                                             <form action="/admin/item/<%= itemId %>/feature/<%= feature[i].id %>?_method=DELETE" method="POST">
                                             <a href="javascript:void()" class=" btn btn-circle btn-sm btn-warning button-edit" data-id="<%= feature[i].id %>" data-name="<%= feature[i].name %>" data-qty="<%= feature[i].qty %>"><i class="fas fa-edit"></i></a>

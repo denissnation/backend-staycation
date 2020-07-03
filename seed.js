@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 // Connect to MongoDB via Mongoose
 seeder.connect(
-	'mongodb://localhost:27017/db_staycation',
+	'mongodb+srv://denis:Dnis199312@cluster0.rgofz.mongodb.net/db_staycation?retryWrites=true&w=majority',
 	{
 		useNewUrlParser: true,
 		useCreateIndex: true,
@@ -490,14 +490,14 @@ var data = [
 				_id: mongoose.Types.ObjectId('5e96cbe292b97300fc903333'),
 				firstName: 'Elfin',
 				lastName: 'Sanjaya',
-				email: 'elfinsanjaya12@gmail.com',
+				emailAddress: 'elfinsanjaya12@gmail.com',
 				phoneNumber: '082377954008'
 			},
 			{
 				_id: mongoose.Types.ObjectId('5e96cbe292b97300fc903334'),
 				firstName: 'Yein',
 				lastName: 'Narayana',
-				email: 'elfinsanjaya1207@gmail.com',
+				emailAddress: 'elfinsanjaya1207@gmail.com',
 				phoneNumber: '082377954008'
 			}
 		]
