@@ -94,77 +94,81 @@ module.exports = {
 		}
 	},
 	bookingPage: async (req, res) => {
-		const {
-			idItem,
-			duration,
-			bookingStartDate,
-			bookingEndDate,
-			firstName,
-			lastName,
-			emailAddress,
-			phoneNumber,
-			accountHolder,
-			bankFrom
-		} = req.body;
+		try {
+			const {
+				idItem,
+				duration,
+				bookingStartDate,
+				bookingEndDate,
+				firstName,
+				lastName,
+				emailAddress,
+				phoneNumber,
+				accountHolder,
+				bankFrom
+			} = req.body;
 
-		if (!req.file) {
-			return res.status(404).json({ message: 'Image not Found' });
-		}
-
-		if (
-			idItem === undefined ||
-			duration === undefined ||
-			bookingStartDate === undefined ||
-			bookingEndDate === undefined ||
-			firstName === undefined ||
-			lastName === undefined ||
-			emailAddress === undefined ||
-			phoneNumber === undefined ||
-			accountHolder === undefined ||
-			bankFrom === undefined
-		) {
-			res.status(404).json({ message: 'Lengkapi Semua Field' });
-		}
-
-		const item = await Item.findOne({ _id: idItem });
-
-		if (!item) {
-			return res.status(404).json({ message: 'Item not Found' });
-		}
-		item.sumBooking += 1;
-		await item.save();
-		let total = item.price * duration;
-		let tax = 0.1 * total;
-
-		let invoice = Math.floor(1000000 + Math.random() * 9000000);
-
-		const member = await Member.create({
-			firstName,
-			lastName,
-			emailAddress,
-			phoneNumber
-		});
-
-		const newBooking = {
-			invoice,
-			bookingStartDate,
-			bookingEndDate,
-			total: (total += tax),
-			itemId: {
-				_id: item.id,
-				title: item.title,
-				price: item.price,
-				duration: duration
-			},
-			memberId: member.id,
-			payments: {
-				proofPayment: `images/${req.file.filename}`,
-				bankFrom: bankFrom,
-				accountHolder: accountHolder
+			if (!req.file) {
+				return res.status(404).json({ message: 'Image not Found' });
 			}
-		};
 
-		const booking = await Booking.create(newBooking);
-		res.status(201).json({ message: 'Success Booking', booking });
+			if (
+				idItem === undefined ||
+				duration === undefined ||
+				bookingStartDate === undefined ||
+				bookingEndDate === undefined ||
+				firstName === undefined ||
+				lastName === undefined ||
+				emailAddress === undefined ||
+				phoneNumber === undefined ||
+				accountHolder === undefined ||
+				bankFrom === undefined
+			) {
+				res.status(404).json({ message: 'Lengkapi Semua Field' });
+			}
+
+			const item = await Item.findOne({ _id: idItem });
+
+			if (!item) {
+				return res.status(404).json({ message: 'Item not Found' });
+			}
+			item.sumBooking += 1;
+			await item.save();
+			let total = item.price * duration;
+			let tax = 0.1 * total;
+
+			let invoice = Math.floor(1000000 + Math.random() * 9000000);
+
+			const member = await Member.create({
+				firstName,
+				lastName,
+				emailAddress,
+				phoneNumber
+			});
+
+			const newBooking = {
+				invoice,
+				bookingStartDate,
+				bookingEndDate,
+				total: (total += tax),
+				itemId: {
+					_id: item.id,
+					title: item.title,
+					price: item.price,
+					duration: duration
+				},
+				memberId: member.id,
+				payments: {
+					proofPayment: `images/${req.file.filename}`,
+					bankFrom: bankFrom,
+					accountHolder: accountHolder
+				}
+			};
+
+			const booking = await Booking.create(newBooking);
+			res.status(201).json({ message: 'Success Booking', booking });
+		} catch (error) {
+			res.status(500).json({ message: 'Internal server error' });
+		}
 	}
 };
