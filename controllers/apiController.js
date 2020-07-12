@@ -60,7 +60,9 @@ module.exports = {
 				mostPicked,
 				testimonial
 			});
-		} catch (error) {}
+		} catch (error) {
+			res.status(500).json({ message: 'Internal server error' });
+		}
 	},
 	detailPage: async (req, res) => {
 		try {
@@ -121,7 +123,7 @@ module.exports = {
 			accountHolder === undefined ||
 			bankFrom === undefined
 		) {
-			return res.status(404).json({ message: 'Lengkapi Semua Field' });
+			res.status(404).json({ message: 'Lengkapi Semua Field' });
 		}
 
 		const item = await Item.findOne({ _id: idItem });
